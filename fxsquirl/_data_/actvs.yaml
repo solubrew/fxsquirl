@@ -1,0 +1,40 @@
+---
+'<(META)>':
+  'DOCid':
+  name: ' Activation Functions'
+  description: >
+    '''Define various activation functions and any hyperparameter options and
+    ranges'''
+  expirary:
+  version:
+  path: '<[LEXIvrs]>'
+  outline: '<[outline]>'
+  authority: 'document|this'
+  security: 'sec|lvl2'
+  <(WT)>: '-32'
+actv12Z0:
+  Name: 'Linear Function'
+  'Description': >
+    Linear Function cannot be stacked all networks collapse to 1 layer
+  Code: 'actv12Z0_a000'
+  fx: 'A=cx'
+actv12Z1:
+  Name: 'Sigmoid Function'
+  Code: 'actv12Z1_a000'
+  fx: 'A=1/(1+e^-x)'
+actv12Z2:
+  Name: 'Tanh Function'
+  Code: 'actv12Z2_a000'
+  fx: ''
+actv12Z3:
+  Name: 'ReLu Function'
+  Code: 'actv12Z3_a000'
+  fx: ''
+actv12Z4:
+  Name: 'Leaky ReLu Function'
+  Code: 'actv12Z4_a000'
+  fx: ''
+actv12Z5:
+  Name: 'Swish Function'
+  Code: 'actv12Z5_a000'
+  fx: ''

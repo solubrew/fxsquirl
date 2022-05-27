@@ -1,0 +1,21 @@
+---
+<(META)>:
+  docid: '<^[uuid]^>'
+  name: Fractionally Executed SQL Queued Recursive Interaction Layer
+  description: >
+    Outline fxsquirl data structure working in chunks called docs and sectns
+      https://www.sqlite.org/limits.html
+      read document data 0
+      read document calculations 1
+      read document format 2
+      fxsquirl library entails an on disc database for each file and an in
+      memory database....purpose?? is supposed to be to allow for extremely
+      large files to be stored while interacting with pieces at a time in memory
+
+  expirary: '<[expiration]>'
+  version: '<[version]>'
+  path: '<[LEXIvrs]>'
+  outline: '<[outline]>'
+  authority: 'document|this'
+  security: 'sec|lvl2'
+  <(WT)>: -32

@@ -1,0 +1,137 @@
+---
+'<(META)>':
+  'DOCid':
+  name:
+  description: >
+    'setup activation algorythms for cycling like the algos in the logicizer function'
+  expirary:
+  version:
+  path: '<[LEXIvrs]>pheonix/elements/store/orgnql/z-data_/orgnql.yaml'
+  outline: '<[outline]>'
+  authority: 'document|this'
+  security: 'sec|lvl2'
+  <(WT)>: '-32'
+actv12Z0:
+  <(META)>:
+    Name: Linear Regression Models
+    Description: >
+      Configure Model Options for Linear Regression
+  a000:
+    nam: Linear Activation
+    code: 'actv12Z0_a000'
+    platform:
+      sklearn:
+        valid: 1
+        docs:
+          - ''
+        model:
+        dargs:
+        args:
+          -
+actv12Z1:
+  <(META)>:
+    Name: Linear Regression Models
+    Description: >
+      Configure Model Options for Linear Regression
+  a000:
+    nam: Sigmoid Activation
+    code: 'actv12Z1_a000'
+    platform:
+      sklearn:
+        valid: 1
+        docs:
+          - ''
+        model:
+        dargs:
+        args:
+          -
+  a001:
+    nam: Hyperbolic Tangent Activation
+    code: 'actv12Z1_a001'
+    platform:
+      sklearn:
+        valid: 1
+        docs:
+          - ''
+        model:
+        dargs:
+        args:
+          -
+actv12Z2:
+  <(META)>:
+    Name: Rectified Linear Activations
+    Description: >
+      Configure Model Options for Linear Regression
+  a000:
+    nam: Rectified Linear Unit Activation
+    code: 'actv12Z2_a000'
+    platform:
+      sklearn:
+        valid: 1
+        docs:
+          - ''
+        model:
+        dargs:
+        args:
+          -
+  a001:
+    nam: Leaky Rectified Linear Unit Activation
+    code: 'actv12Z2_a001'
+    platform:
+      sklearn:
+        valid: 1
+        docs:
+          - ''
+        model:
+        dargs:
+        args:
+          -
+  a002:
+    nam: Parametric Rectified Linear Unit Activation
+    code: 'actv12Z2_a002'
+    platform:
+      sklearn:
+        valid: 1
+        docs:
+          - ''
+        model:
+        dargs:
+        args:
+          -
+actv12Z3:
+  <(META)>:
+    Name: Multi Class Activations
+    Description: >
+      Configure Model Options for Linear Regression
+  a000:
+    nam: Softmax Activation
+    code: 'actv12Z3_a000'
+    platform:
+      sklearn:
+        valid: 1
+        docs:
+          - ''
+        model:
+        dargs:
+        args:
+          -
+actv12Z4:
+  <(META)>:
+    Name: Found Formula Activations
+    Description: >
+      Configure Model Options for Linear Regression
+  a000:
+    nam: Swish Activation
+    code: 'actv12Z4_a000'
+    platform:
+      sklearn:
+        valid: 1
+        docs:
+          - ''
+        model:
+        dargs:
+        args:
+          -
+bkprp12Z0:
+  Description: >
+    Define backpropogation deravitives of viable activations

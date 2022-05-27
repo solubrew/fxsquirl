@@ -1,0 +1,610 @@
+---
+<(META)>:
+  DOCid: fb395ce0-d0b2-4dd4-bce8-c1a632f431d7
+  name: Molecules Level Collector Module Python URL Tool Document
+  description: >
+    ''
+  expirary: <[expiration]>
+  version: <[version]>
+  path: <[LEXIvrs]>pheonix/elements/store/orgnql/z-data_/orgnql.yaml
+  outline: <[outline]>
+  authority: document|this
+  security: sec|lvl2
+  <(WT)>: -32
+fonql:
+  LLFS:
+    name: Local Linux File System
+    code: LLFS
+    okey: orgnql
+    f(x): fonql
+    types:
+      - Ext3
+      - Ext4
+    structure:
+    verse: <[DATAvrs]>/IAS/Transform/WORK/
+    page: 100000
+    depth: 1000
+    perf:
+      cores: 4
+    followlinks: True
+  ILFS:
+    name: Intranet Linux File System
+    code: ILFS
+    types:
+      - NFS
+    page: 1000
+    perf:
+      cores: 4
+  RLFS:
+    name: Remote Linux File System
+    code: RLFS
+    page: 1000
+    perf:
+      cores: 4
+  LWFS:
+    name: Local Windows File System
+    code: LWFS
+    types:
+      - FAT32
+    page: 1000
+    perf:
+      cores: 4
+  IWFS:
+    name: Intranet Windows File System
+    code: IWFS
+    types:
+      - SMB
+    page: 1000
+    perf:
+      cores: 4
+  RWFS:
+    name: Remote Windows File System
+    types:
+    page: 1000
+    perf:
+      cores: 4
+  ARKFS:
+    name: Archived File System
+    how:
+      zip:
+        extensions: ['.zip']
+      tar:
+        extensions: ['.tar.gz','.tar.bz','.tar.bz2','.rar']
+monql:
+  headers:
+    - User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36
+    - [Content-type: application/json, 'Accept': 'application/json']
+  parser: 'html5lib'
+  base:
+    name: Markup Language
+    f(x): monql
+    page: 1000
+    perf:
+      cores: 4
+    parameters:
+    link:
+      start: |
+        <a href=>
+      finish: |
+        </a>
+  MARKDOWN:
+    name: Mark Down
+    f(x): monql
+    ext:
+      - .md
+  XML:
+    name: X Markup Language
+    f(x): monql
+    page: 1000
+    perf:
+      cores: 4
+    parameters:
+      document:
+        start: |
+          <?xml version="1.0" ?>
+        finish: |
+      table:
+        start: |
+          <table>
+        finish: |
+          </table>
+      columns:
+        start: |
+          <td>
+        finish: |
+          </td>
+      rows:
+        start: |
+          <tr>
+        finish: |
+          </tr>
+  HTML:
+    name: Hyper Text Markup Language
+    f(x): monql
+    parser: html5lib
+    page: 1000
+    perf:
+      cores: 4
+    parameters:
+      document:
+        base:
+          start: >
+            <!DOCTYPE html>
+            <html lang="en">
+          finish: |
+            </html>
+      header:
+        base:
+          start:
+            <(TEXT)>>: >
+              <head>
+              </head>
+        jinja2:
+          start:
+            <(TEXT)>>: >
+              <head>
+                <title>{{ title }} | Project Dream Team</title>
+                <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+                <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+                <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+                <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+              </head>
+      body:
+      nav:
+      div:
+      ul:
+      li:
+      table:
+        start: |
+          <table>
+        finish: |
+          </table>
+      columns:
+        start: |
+          <td>
+        finish: |
+          </td>
+      rows:
+        start: |
+          <tr>
+        finish: |
+          </tr>
+    xpath:
+      h1:
+        term: //h1
+      span:
+        term: //span
+      table:
+        term: //table
+      column:
+        term: //td
+      links:
+        term: //a
+      div:
+        term: //div
+      css:
+        term: //css
+
+sonql:
+  cfg:
+    page: 100000
+  SQLT:
+    name: SQLite 3 Database File
+    code: SQLT
+    known: [.sqlite, .db, .sqlite3]
+    f(x): sonql
+    cfg:
+      page: 100000
+      'adders':
+        limitoffset: >
+          LIMIT <[limit]> OFFSET <[offset]>
+      admincmd: >
+        , [creby] INTEGER,
+        [creon] TEXT,
+        [modby] INTEGER,
+        [modon] TEXT,
+        [dlt] INTEGER NOT NULL DEFAULT (0),
+        [actv] INTEGER NOT NULL DEFAULT (1))
+      admincols:
+        'creby': 0
+        'creon': 0
+        'modby': 0
+        'modon': 0
+        'dlt': 0
+        'actv': 1
+      'fill':
+        '<[limit]>': 100000
+        '<[offset]>': 0
+    okey: orgnql
+    organiz:
+      - special
+    tags:
+    tmplt:
+      connection: <[path]>
+      parameters:
+        server:
+          name: <[name]>
+          path:
+          credientials: <[parameters]>
+    cmds:
+      all_table: >
+        SELECT
+          name
+        FROM sqlite_master
+        WHERE type = "table"
+      all_view: |
+        SELECT'
+          name
+         FROM sqlite_master
+         WHERE type = "view"
+      columns: |
+        SELECT
+          o.Name,
+          c.Name
+         FROM master.sys.columns AS c
+         INNER JOIN master.sys.objects AS o ON c.object_id = o.object_id
+         WHERE o.type =
+      create_table: >
+        CREATE TABLE IF NOT EXISTS <[table]> (
+        INSERT INTO <[table]> (
+          <@[[:.cols.:],]@>
+        ) VALUES (
+          <@[?:.]@>
+        )
+      create_view: >
+        'CREATE VIEW IF NOT EXISTS <[view]> AS <[cmd]>'
+      exists_table: >
+        SELECT
+          name
+        FROM sqlite_master
+        WHERE type = "table"
+        AND name = <[":.table.:"]>;
+      filter: >
+        ? WHERE <[fld]> <[comparotor]> <[actvtr]>
+        ? AND <[]>
+        ? OR <[]>
+        with_dict
+        with: HAVING <[fld]> <[comparotor]> <[actvtr]>
+        connectors:
+        - AND
+        - OR
+      get_columns: >
+        PRAGMA table_info(<[table]>);
+      lengthoftable: >
+        SELECT COUNT(<[table]>id) FROM <[table]>
+      simple_select: >
+        SELECT'
+          *
+        FROM <[abs_table]> AS <[abrv]>
+        <[connector]> <[abs_table]> AS <[abrv]> ON <[cpl_a]> = <[cpl_b]>
+    skrps:
+      - <[here]>/zz_skrps
+      - <[project]>/2_Resources/SKRPs
+      - <[designmodel]>/Libraries/SKRPs
+  MYSQL:
+    name: MySQL Server
+    connection:
+    parameters:
+    servers:
+      -
+        name: mysql_datavein
+        address: 192.168.1.210
+        port: 3306
+      -
+        name: mysql_lexi
+        address:
+        port:
+    f(x): sonql
+    'cfg':
+      page: 10000
+      'adders':
+    perf:
+      cores: 4
+    name: Structured Query Language
+    code: SQL
+    simple:
+    tmplt: >
+    okey: orgnql
+    known: [SELECT, FROM, WHERE, INSERT]
+    okey: orgnql
+    organiz:
+      - T-SQL:
+    cmds:
+      comment:
+        single_line:
+          start: '--'
+          end:
+        multi_line:
+          start: '/*'
+          end: '*/'
+  FIREDB:
+    name: Firebird Database
+    connection:
+    parameters:
+    f(x): firdbonql
+  POSTGRESQL:
+    'name': PostGres SQL Server
+    'code': PGS
+    'f(x)': sonql
+    'cfg':
+      page: 100000
+      adders:
+        limitoffset: >
+          LIMIT <[limit]> OFFSET <[offset]>
+      admincmd: >
+        , creby INTEGER,
+        creon TEXT,
+        modby INTEGER,
+        modon TEXT,
+        dlt INTEGER NOT NULL DEFAULT (0),
+        actv INTEGER NOT NULL DEFAULT (1))
+      admincols:
+        'creby': 0
+        'creon': 0
+        'modby': 0
+        'modon': 0
+        'dlt': 0
+        'actv': 1
+      'fill':
+        '<[limit]>': 100000
+        '<[offset]>': 0
+    okey: orgnql
+    organiz:
+      - special
+    tags:
+    tmplt:
+      connection: <[path]>
+      parameters:
+        server:
+          name: <[name]>
+          path:
+          credientials: <[parameters]>
+    cmds:
+      create_table: >
+        CREATE TABLE IF NOT EXISTS <[table]> (
+        INSERT INTO <[table]> (
+          <@[[:.cols.:]]@>
+        ) VALUES (
+          <@[?:.]@>
+        )
+      all_table: >
+        SELECT table_name
+         FROM information_schema.tables
+         WHERE table_type='BASE TABLE';
+      all_table_a000: >
+        SELECT table_name
+         FROM information_schema.tables
+         WHERE table_schema='<[scheme]>'
+         AND table_type='BASE TABLE';
+      all_view: >
+        SELECT table_name
+         FROM information_schema.views;
+      exists_table: >
+        SELECT table_name
+         FROM information_schema.tables
+         WHERE table_schema='<[scheme]>'
+         AND table_type='BASE TABLE'
+         AND table_name='<[table]>';
+      get_columns: >
+        SELECT
+          TABLE_CATALOG,
+          TABLE_SCHEMA,
+          COLUMN_NAME,
+          Is_NULLABLE,
+          DATA_TYPE
+         FROM INFORMATION_SCHEMA.COLUMNS
+         WHERE TABLE_SCHEMA = '<[scheme]>'
+          AND TABLE_NAME = '<[table]>'
+         ORDER BY
+          ORDINAL_POSITION
+      get_schemes: >
+        SELECT
+          schema_name
+        FROM information_schema.schemata;
+      simple_select: >
+        SELECT
+          <@[columns]@>
+        FROM <[abs_table]> AS <[abrv]>
+        <@[INNER JOIN:.server_schema_table]@> AS <@[abbrv]@> ON <[<[abbrv1]>.:.col]> = <[<[abbrv0]>.:.col]>
+      filter: >
+        ? WHERE <[fld]> <[comparotor]> <[actvtr]>
+        ? AND <[]>
+        ? OR <[]>
+        with_dict
+      with: HAVING <[fld]> <[comparotor]> <[actvtr]>
+      connectors:
+        - AND
+        - OR
+      columns: >
+        SELECT
+          o.Name,
+          c.Name
+        FROM master.sys.columns AS c
+        INNER JOIN master.sys.objects AS o ON c.object_id = o.object_id
+        WHERE o.type =
+      lengthoftable: >
+        'SELECT COUNT(<[table]>id) FROM <[table]>'
+      next: >
+        SELECT
+          <[table.:Id]>,
+          [creby],
+          [creon],
+          [modby],
+          [modon],
+          [dlt],
+          [actv]
+        FROM <[table]>
+        ORDER BY
+          <[table.:Id]> DESC
+      wheres:
+        date: >
+          AND strftime(<[date_column]>, '%Y-%m-%d') > strftime('<[last_value]>', '%Y-%m-%d')
+
+  MSSQL:
+    name: Microsoft SQL Server
+    connection: >
+      DRIVER={<[driver]>};
+      SERVER=<[server]>;
+      DATABASE=<[db]>;
+      <[permissions]>;
+    parameters:
+      driver: SQL SERVER
+      permissions: Trusted_Connection-yes
+      server: '<[server]>'
+      db: '<[db]>'
+    f(x): sonql
+    page: 1000
+    perf:
+      cores: 4
+    knowns:
+      <{LOAD:=>FROM.ROLEs?}>: where to connect this to get the right info???
+    skrps:
+      - <[here]>/zz_skrps
+      - <[project]>/2_Resources/SKRPs
+      - <[designmodel]>/Libraries/SKRPs
+    cmds:
+      get_columns: >
+        SELECT
+          TABLE_CATALOG,
+          TABLE_SCHEMA,
+          COLUMN_NAME,
+          Is_NULLABLE,
+          DATA_TYPE
+        FROM <[db]>.INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = '<[table]>' AND TABLE_SCHEMA = '<[schema]>'
+        ORDER BY
+          ORDINAL_POSITION
+yonql:
+  name: Raw Object Notation Query Language
+  YAML:
+    name: YAML Aint Markup Language
+    f(x): yonql
+    page: 1000
+    perf:
+      cores: 4
+    okey: orgnql
+    organiz:
+    cmds:
+      comment:
+        single_line:
+          start:
+          end:
+        multi_line:
+          start: '"'
+          end: '"'
+    lint:
+      defect:
+        rules:
+          braces: enable
+          brackets: enable
+          colons: disable
+          commas: enable
+          comments:
+            level: warning
+          comments-indentation:
+            level: warning
+          document-end: disable
+          document-start:
+            level: warning
+          empty-lines: enable
+          empty-values: disable
+          hyphens: enable
+          indentation: enable
+          key-duplicates: disable
+          key-ordering: disable
+          line-length: disable
+          new-line-at-end-of-file: enable
+          new-lines: enable
+          octal-values: enable
+          quoted-strings:
+            quote-type: any
+          trailing-spaces: disable
+          truthy:
+            level: warning
+      base:
+        rules:
+          braces: enable
+          brackets: enable
+          colons: disable
+          commas: enable
+          comments:
+            level: warning
+          comments-indentation:
+            level: warning
+          document-end: disable
+          document-start:
+            level: warning
+          empty-lines: enable
+          empty-values: enable
+          hyphens: enable
+          indentation: enable
+          key-duplicates: disable
+          key-ordering: disable
+          line-length: enable
+          new-line-at-end-of-file: enable
+          new-lines: enable
+          octal-values: enable
+          quoted-strings:
+            quote-type: any
+          trailing-spaces: enable
+          truthy:
+            level: warning
+  JSON:
+    name: Java Script Object Notation
+    f(x): jsonql
+    page: 1000
+    perf:
+      cores: 4
+  HDF5:
+    name:
+    f(x): hdfonql
+    page:
+    perf:
+      cores:
+  BSON:
+    name: Binary Sequential Object Notation
+    f(x): bsonql
+    page: 1000
+    perf:
+      cores: 4
+  MGODB:
+    name: Mongo NonRelational Database
+    connection:
+    servers:
+    ports:
+    f(x): mngonql
+  REQL:
+    name: Rethink Document Store Database
+    connection: 'reql.connect(<[server]>,<[port]>)'
+    servers:
+      -
+        ip: 192.168.1.131
+        port: 28015
+        base:
+          db: LEXI
+      -
+        ip:
+        port:
+    f(x): reonql
+    page: 1000
+    perf:
+      cores: 4
+    execute: 'reql.<[cmd]>(<[payload]>).run()'
+    cmds:
+      - db_create
+      - table_create
+      - table_populate
+      - table_list
+<(DNA)>:
+  <[date]>:
+    config:
+      version: <[active:.version]>
+      test:
+      description: >
+      work:
+  <[date]>:
+    here:
+      version: <[active:.version]>
+      test:
+      description: >
+      work:

@@ -1,0 +1,23 @@
+--- #                                  ||
+<(META)>: #                                ||
+  DOCid: <^[uuid]^> #                          ||
+  name: Elements Level Objnql Module YAML Document #          ||
+  description: > #                          ||
+    Configure Subextensions for Object type files
+  expirary: <[expiration]> #                      ||
+  version: <[version]> #                        ||
+  path: <[LEXIvrs]>pheonix/elements/store/orgnql/z-data_/objnql.yaml #||
+  outline: <[outline]> #                        ||
+  authority: document|this #                      ||
+  security: sec|lvl2 #                          ||
+  <(WT)>: -32 #                            ||
+objnql:
+audonql:
+  mp3:
+  wav:
+csvonql:
+imgonql:
+tblonql:
+txtonql:
+filetypes: /home/solubrew/OPs/opDistributeContent/3_Work/jobSolutionsBrewer/actvPublic/tskSites/3_Work/stp-thingery/3_Work/content/whats/abstracts/defined/digitalsystems/filetypes.yaml
+syntaxtypes: /home/solubrew/OPs/opDistributeContent/3_Work/jobSolutionsBrewer/actvPublic/tskSites/3_Work/stp-thingery/3_Work/content/whats/abstracts/defined/digitalsystems/syntax.yaml
