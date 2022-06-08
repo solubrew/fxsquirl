@@ -8,8 +8,6 @@
 		Primarily an engine class for building data artifacts
 	expirary: '<^[expiration]^>'
 	version: '<^[version]^>'
-	path: '<[LEXIvrs]>pheonix/molecules/collector/collector.py'
-	outline: '<[outline]>'
 	authority: 'document|this'
 	security: 'seclvl2'
 	<(WT)>: -32
