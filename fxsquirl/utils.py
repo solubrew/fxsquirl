@@ -17,8 +17,6 @@
 from os.path import abspath, dirname, join
 #===============================================================================||
 here = join(dirname(__file__),'')#						||
-there = abspath(join('../../..'))#						||set path at pheonix level
-version = '0.0.0.0.0.0'#												||
 log = False
 #===============================================================================||
 
@@ -51,3 +49,8 @@ def yieldBreak(data, table):
 					if log: print(f'Data is dict with empty DataFrame for {table}')
 					return True
 	return False
+
+
+#===============================Source Materials================================||
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
