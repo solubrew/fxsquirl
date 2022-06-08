@@ -38,15 +38,15 @@ def yieldBreak(data, table):
 		if table in data.keys():
 			if 'records' in data[table].keys():
 				if data[table]['records'] == []:
-					if log: print(f'Data is dict with empty "records" key for {table}')
+					if log: print(f'dict with empty "records" key for {table}')
 					return True
 			elif 'dataframe' in data[table].keys():
 				if data[table]['dataframe'].empty:
-					if log: print(f'Data is dict with empty "dataframe" key for {table}')
+					if log: print(f'dict with empty "dataframe" key for {table}')
 					return True
 			elif isinstance(data[table], DataFrame):
 				if data[table].empty:
-					if log: print(f'Data is dict with empty DataFrame for {table}')
+					if log: print(f'dict with empty DataFrame for {table}')
 					return True
 	return False
 
