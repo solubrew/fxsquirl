@@ -48,7 +48,7 @@ from subtrix import subtrix#									||
 here = join(dirname(__file__),'')#												||
 there = abspath(join('../../..'))#												||set path at pheonix level
 version = '0.0.0.0.0.0'#														||
-log = False#																	||
+log = True#																	||
 #===============================================================================||
 pxcfg = join(abspath(here), '_data_/orgnql.yaml')#								||
 class doc:#																		||cmd needs to hold information about coping and/or moving files
@@ -59,7 +59,7 @@ class doc:#																		||cmd needs to hold information about coping and/or
 		if kind == None:#														||
 			kind = exam.thing(self.doc).kind#									||
 		self.kind = kind#														||
-		self.paths, self.philes, self.filters = [self.doc,], []#				||
+		self.paths, self.philes, self.filters = [self.doc,], [], []#			||
 		self.filters = {'inc': [], 'exc': []}#									||
 		self.pool = None#														||
 		self.pathslyst, self.sdepth, self.writefiles = [], doc.count('/'), []#	||
@@ -169,11 +169,7 @@ class doc:#																		||cmd needs to hold information about coping and/or
 
 	def filtr(self, filtrLS, depth=None, how='inc'):#							||
 		''#									||
-		try:
-			philes = self.nphiles
-		except Exception as e:
-			print('Exception', e)
-			philes = self.extractFiles(self.dikt, depth)
+		if log: print('Filter Philes', self.philes)
 		if self.date_filters != {}:
 			#filtering date coded file names not attributes
 			#is it possible to filter date
@@ -190,7 +186,8 @@ class doc:#																		||cmd needs to hold information about coping and/or
 			elif 'equal' in self.date_filters.keys():
 				pass
 		self.nphiles = []
-		for phile in philes:
+		for phile in self.philes:
+			if log: print('Filter Phile', phile)
 			for filt in filtrLS:
 				if how == 'inc':
 					if filt in phile:
@@ -216,7 +213,7 @@ class doc:#																		||cmd needs to hold information about coping and/or
 		return self
 
 	def read(self, fill=None, cfg=None, cmd=None):#								||
-		'Create a Generator for Reading the Given Filesystem'#					||
+		'''Create a Generator for Reading the Given Filesystem'''#					||
 		if self.paths == []:
 			self.paths.append(self.doc)
 		if cfg != None:#														||
@@ -234,20 +231,24 @@ class doc:#																		||cmd needs to hold information about coping and/or
 					continue
 				#try:# need to work out dealing with permissions issues "Errno 13"
 				for i in listdir(p):
+					if log: print(f'file {i}')
 					next(self._processSubTree(p, i))
+					if log: print('Philes', self.philes)
 					if len(self.philes) >= self.config['page']:#			||Set Chunk size
+						if log: print('Paths', paths)
 						self.dikt = calcd.stuff(self.paths).paths2Tree(True).dikt
 						yield self
-						for phile in self.philes:
+						for phile in self.philes:#cleanup yielded data source
 							if log: print('Remove phile', phile)
 							self.paths.remove(phile)
+				if log: print('Read paths', self.paths)
+				self.dikt = calcd.stuff(self.paths).paths2Tree(True).dikt#					||
 				# except Exception as e:
 				# 	if 'Errno 13' in str(e):
 				# 		if log: print(f'List Dir Permission error for {p}')
 				# 	if log: print(f'ListDir Error {e}')
 				self.paths.remove(p)
 				self.paths.sort()#									||
-		self.dikt = calcd.stuff(self.paths).paths2Tree(True).dikt#					||
 		yield self#																||
 
 	def select(self, terms):#													||
@@ -333,35 +334,32 @@ class doc:#																		||cmd needs to hold information about coping and/or
 
 	def _processSubTree(self, p, i):
 		''' '''
-		lock = self._filterPath(i, 0, 0)
+		lock = self._filterPath(i)
 		if log: print('LOCK', lock)
 		if lock != 0:#										||
 			yield self#										||
 		path = f'{p}/{i}'
 		if isfile(path):
-			if log: print('_path', path)
-			lock = self._filterPath(i, 0)
-			if log: print('LOCK', lock)
-			if lock != 0:#										||
-				yield self#										||
-			if log: print('Path isfile', path)
+			if log: print('Path add to philes ', path)
 			self.philes.append(path)#							||
 		elif isdir(path):#													||
-			if log: print('Path isdir', path)
+			if log: print('Path add to paths', path)
 			self.paths.append(path)#							||
 		else:
 			if log: print('Path Not Valid', path)
 		yield self
 
-	def _filterPath(self, i, lock, switch=2):
-		''' '''
+	def _filterPath(self, i, switch=2):
+		'''switch: determines whether to check includes, excludes or both '''
 		if switch in [0, 2]:
-			if self.filters['exc'] != None:
+			if self.filters['exc'] != None and self.filters['exc'] != []:#		||
+				if log: print('Check Exclude Filters', self.filters['exc'])
 				for filtr in self.filters['exc']:#				||Check for exclusion
 					if filtr in i:#								||
 						return 1#									||
 		if switch in [1, 2]:
-			if self.filters['inc'] != None:#			||
+			if self.filters['inc'] != None and self.filters['inc'] != []:#		||
+				if log: print('Check Include Filters', self.filters['inc'])
 				for filtr in self.filters['inc']:#		||Check for inclusion
 					if filtr in i:#						||
 						return 0#						||
@@ -574,11 +572,11 @@ def uncompress(zp, uzp):
 						makedirs(uzp)
 					z.extractall(uzp)
 			except Exception as e:
+				if 'File exists:' in e:
+					continue
 				if log: print(f'Unzip of {zp} failed due to {e}')
 				errp = '/mnt/overse/library/Software/z-errors/src/'
 				if log: print('Error Path', errp)
-				if log: print('What is happening to the makedirs')
-				#makedirs(errp)
 				if log: print(f'Move Errored File to {errp}')
 				fileMove(zp,errp,':::KILL:::')
 				if log: print(f'File Moved')

@@ -23,6 +23,15 @@ there = abspath(join('../../..'))#						||set path at pheonix level
 version = '0.0.0.0.0.0'#												||
 log = False
 #===============================================================================||
+
+def csv2db(dbo, path):
+	datar = tblonql.doc(path).read()
+	while True:
+		dwrite = next(datar, None)
+		if dwrite == None:
+			break
+		dbo.write(dwrite.dikt)
+
 def yieldBreak(data, table):
 	if data == {}:
 		if log: print('Data is empty DataFrame')

@@ -252,6 +252,10 @@ class engine(builder.engine):
 		self.websession.headers.update(self.headers)#							||
 		return self
 
+	def postEP(self):
+		'''#integrate with self.WebSession _request and error handling '''
+		r = requests.post(url, json=body, headers=headers, timeout=timeout)
+
 	def randomed(self, vsize, data, size, subsize, replacement=None):
 		'select a random data point with or without data point replacment'
 		self.pop = describPopulation(data)

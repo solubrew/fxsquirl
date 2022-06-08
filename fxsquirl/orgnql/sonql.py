@@ -2,14 +2,12 @@
 ''' #																			||
 --- #																			||
 <(META)>: #																		||
-	DOCid: <^[uuid]^> #															||
+	docid: 'c5185013-7cae-4cf6-b7a6-093dfbbe337b' #								||
 	name: Elements Level Store.Orgnql Module SQL Extension Python Doc #			||
 	description: > #															||
 		create SQL statements and issue them against various databases#			||
 	expirary: <[expiration]> #													||
 	version: <[version]> #														||
-	path: <[LEXIvrs]>pheonix/elements/store/orgnql/sonql.py #					||
-	outline: <[outline]> #														||
 	authority: document|this #													||
 	security: sec|lvl2 #														||
 	<(WT)>: -32 #																||
@@ -37,12 +35,12 @@ from fxsquirl.utils import yieldBreak
 here = join(dirname(__file__),'')#												||
 there = abspath(join('../../..'))#												||set path at pheonix level
 version = '0.0.0.0.0.0'#														||
-log = False
+log = True
 #===============================================================================||
 pxcfg = join(abspath(here), '_data_/orgnql.yaml')#									||assign default config
+
 class doc(object):#																		||=>Define class
-	'Control I/O for relational database formats'#								||=>Describe class
-	version = '0.0.0.0.0.0'#													||=>Set version
+	'''Control I/O for relational database formats'''#								||=>Describe class
 	def __init__(self, doc, kind=None, params=None, cfg=None):#					||=>
 		self.doc = doc#															||set doc var
 		self.config = condor.instruct(pxcfg).override(cfg).select('sonql')#		||
@@ -54,7 +52,8 @@ class doc(object):#																		||=>Define class
 		self._conx({'server': '', 'database': self.doc})#													||
 		self.dbdata = self.config.dikt[self.dbt]
 		self.admindata = calctr.stuff(self.dbdata['cfg'])
-		self.dikt, self.build, self.dfs = {}, {}, {}
+		self.dikt, self.build, self.dfs, self.beenChecked = {}, {}, {}, {}
+
 	def builder(self, table: str, how: str='SELECT', what: str='table'):#		||
 		'''Build query'''#
 		if table not in self.dikt.keys():
@@ -88,6 +87,7 @@ class doc(object):#																		||=>Define class
 		self.dikt[table]['columns'] = cols
 		self.dikt[table]['cmd'] = cmd
 		return cmd
+
 	def checkTable(self, table):
 		'''Check if table exists in the connected database'''
 		cmd = self.config.dikt[self.dbt]['cmds']['exists_table']
@@ -98,10 +98,12 @@ class doc(object):#																		||=>Define class
 		if data != []:
 			return True
 		return False
+
 	def delete(self, data):
 		'''Delete records given a where function with the option to use the
 			admin fields of actv, dlt'''
 		return self
+
 	def drop(self, tables, what: str='table', lock=3321):
 		'''Delete database assets defined by given data'''
 		if tables == 'ALL':
@@ -123,6 +125,7 @@ class doc(object):#																		||=>Define class
 				return self
 			self._run(table, [], 'DROP')
 		return self
+
 	def execute(self, cmd: str, table: str=''):
 		'''Execute given cmd'''
 		if table == '':
@@ -130,6 +133,7 @@ class doc(object):#																		||=>Define class
 		self.dikt[table] = {'cmd': cmd}
 		self._rurn(table, [], self.getHow(cmd))
 		return self
+
 	def expand(self):
 		'''Add columns to an existing table
 			use revisioning cmd to accomplish this function
@@ -138,6 +142,7 @@ class doc(object):#																		||=>Define class
 			drop originial table
 			copy temp table to original table name
 			drop temp table'''
+
 	def getInfo(self, what='table', getTables=True, getColumns=True):
 		'''Retreive Information about the database'''
 		if log: print('Get Info')
@@ -165,11 +170,13 @@ class doc(object):#																		||=>Define class
 				self.getTables(records, getColumns)
 		self.dikt.pop(table)
 		return self
+
 	def getSchemes(self):
 		'''Get all Active Schemes from Database'''
 		cmd = self.config[self.dbt]['cmds']['get_schemes']#					||
 		self._run(cmd, [])#											||run sql cmd
 		return self
+
 	def getTables(self, tables, getCols=True, scheme='Public'):
 		''' '''
 		for table in tables:#limit the auto grab to 10 tables
@@ -181,6 +188,7 @@ class doc(object):#																		||=>Define class
 				if log: print(f'Get Columns for {table}')
 				self.getTableColumns(table)
 		return self
+
 	def getTableColumns(self, table):#								||
 		'''get columns from database table'''
 		table = sanitize(table, self.dbt, 'table')
@@ -200,12 +208,14 @@ class doc(object):#																		||=>Define class
 				elif self.dbt == 'POSTGRESQL':
 					self.dikt[table]['columns'].append(col[2])
 		return self#															||
+
 	def getTableLength(self, table):
 		''' '''
 		cmd = self.config[self.dbt]['cmds']['lengthoftable']#					||
 		self._run(cmd, [], 'read', table)
 		self.dikt = self.build
 		return self
+
 	def read(self, data: dict={}, cfg: dict={}, gfill: dict={}):#					||
 		'''Return iterator object to pull data in chunks via offset'''#			||
 		if log: print(f'Read Data {data}')
@@ -259,6 +269,7 @@ class doc(object):#																		||=>Define class
 						self.status = True
 						self.dfs[table] = DataFrame()
 		yield self
+
 	def rename(self, table, ntable):
 		''' '''
 		self.build = {table: {}}
@@ -267,6 +278,7 @@ class doc(object):#																		||=>Define class
 		self.builder(how, {}, cfg, what)
 		self._run(table, [], how)
 		return self
+
 	def validateColumns(self, cols: list, how: str='SELECT'):#						||
 		'Increment duplicate columns from data to ensure unique columns'#		||
 		tcols = []#																||
@@ -281,6 +293,7 @@ class doc(object):#																		||=>Define class
 				col = f'{col}_{0}'.format(thing.what().uuid().ruuid[:5])#		||
 			tcols.append(sanitize(col, self.dbt, 'col'))#						||
 		return tcols
+
 	def write(self, data, cfg: dict={}):#										||
 		'''Leverage SQL Upsert in order to create a comprehensive write
 			function '''
@@ -296,16 +309,24 @@ class doc(object):#																		||=>Define class
 			except Exception as e:
 				if log: print(f'Columns for Table {table} not available {e}')
 				continue
-			if self.checkTable(table) == False:#								||
-				self.builder(table, 'CRE')#										||
-				self._run(table, [], 'CRE')#									||
+			if log: print('Checktable', table)
+			if not self.beenChecked.get(table):
+				if self.checkTable(table) == False:#								||
+					self.builder(table, 'CRE')#										||
+					self._run(table, [], 'CRE')#									||
+			self.beenChecked[table] = True#may go bad if something breaks in the self._run preecding this
+			if log: print('Check Blank input data')
 			if self.dikt[table]['records'] in (None, []):#						||
 				continue
 			if 'WHERE' not in cfg.keys():#											||
+				if log: print('Build INSERT')
 				self.builder(table, 'INSERT')#										||
+				if log: print('Run INSERT')
 				self._run(table, self.dikt[table]['records'], 'INSERT')#			||
 			else:#																	||
+				if log: print('Build UPSERT')
 				self.builder(table, 'UPSERT')#										||
+				if log: print('Run UPSERT')
 				self._run(table, data[table]['records'], 'UPSERT')#					||
 		if 'view' in self.dikt.keys():
 			for view in list(self.dikt['view'].keys()):
@@ -313,6 +334,7 @@ class doc(object):#																		||=>Define class
 		if 'index' in self.dikt.keys():
 			for index in list(self.dikt['index'].keys()):
 				self._run(index, [], 'CRE')
+
 	def _conx(self, db=None, server=None):#										||
 		'''Connect to Database'''#												||
 		dbvrs = self.session.ppov['stores']['DBvrs']#							||
@@ -339,6 +361,7 @@ class doc(object):#																		||=>Define class
 		else:
 			print('Failed to establish connection to', self.doc)
 		return self#															||
+
 	def _configure_data(self, data):
 		'''Configure data into a standard form allowing the user to submit in
 			various forms
@@ -414,10 +437,13 @@ class doc(object):#																		||=>Define class
 					print('Data Table', data[t])
 				ndata = {t: {'records': records, 'columns': columns}}
 		return ndata
+
 	def __enter__(self):
 		return self
+
 	def __exit__(self, type, value, traceback):
 		self.conn.close()
+
 	def _fillAdminCols(self):
 		'''Fill in data for admin columns, user, timestamps, etc'''
 		if log: print('Fill Admin Columns')
@@ -449,6 +475,7 @@ class doc(object):#																		||=>Define class
 						dat.extend(list(self.admindata.it['admincols'].values()))#				||
 						ndata.append(dat)#										||
 		return ndata
+
 	def _findDBType(self):
 		''' '''
 		DBvrs = self.session.ppov['stores']['DBvrs']
@@ -465,6 +492,7 @@ class doc(object):#																		||=>Define class
 		else:
 			print('Unknown Database Document', self.doc)
 		return self
+
 	def _run(self, table, data: list=[], how='SELECT'):#						||cycle through cmds built to get data from various tables
 		'''Fully Execute cmds built in sql document could probably recreate
 			this as a method for leverage from the integrated document and a
@@ -512,11 +540,14 @@ class doc(object):#																		||=>Define class
 			else:
 				if log: print(f'Execution for {how} Failed')
 		return done#															||
+
 	def _setAdminData(self):#													||
 		''' '''#																||
 		self.admindata.it['admincols']['creon'] = thing.when().dtid#			||
 		self.admindata.it['admincols']['modon'] = thing.when().dtid#			||
 		return self#															||
+
+
 def backupWRITE(wro, cmd, data, status):
 	'''Write database actions to a distributed communications network to ensure
 		database backup via syncronized write commmands
@@ -525,15 +556,20 @@ def backupWRITE(wro, cmd, data, status):
 		'''
 
 	return
+
+
 def bldCREDatabase(name, owner=None, pxcfg={}):
 	if owner == None:
 		owner = 'solubrew'
 	cmd = f'CREATE DATABASE {name}'
 	return cmd
+
+
 def bldCRESchema(name, dbt, pxcfg={}):
 	'Create a new schema'
 	name = sanitize(name, dbt)
 	return f'CREATE SCHEMA IF NOT EXISTS {name};'#								||
+
 def bldCRETable(cols, table, cfg={}, dbt=None, pxcfg={}):
 	'Build Table Creation SQL Statement'
 	table = sanitize(table, dbt)#											||
@@ -576,6 +612,7 @@ def bldCRETable(cols, table, cfg={}, dbt=None, pxcfg={}):
 				cmd = f'{cmd} UNIQUE'
 	cmd = bldAdminConfig(cmd, cfg)
 	return cmd
+
 def bldAdminConfig(cmd: str, cfg: dict, pxcfg={}):
 	''' '''
 	lock = 0
@@ -589,6 +626,7 @@ def bldAdminConfig(cmd: str, cfg: dict, pxcfg={}):
 	else:
 		cmd = f'{cmd})'
 	return cmd
+
 def bldCREView(view, select, cfg={}, dbt=None, pxcfg={}):
 	'Build View Creation SQL Statement'
 	view = sanitize(view, dbt)
@@ -599,6 +637,7 @@ def bldCREView(view, select, cfg={}, dbt=None, pxcfg={}):
 	else:
 		cmd = f'CREATE VIEW IF NOT EXISTS {view} AS {select}'
 	return cmd#							||
+
 def bldCREIndex(cols, table, cfg={}, dbt=None, pxcfg={}):
 	'Build Index Creation SQL Statement'
 	table = sanitize(table, dbt)
@@ -606,6 +645,7 @@ def bldCREIndex(cols, table, cfg={}, dbt=None, pxcfg={}):
 		scheme = sanitize(cfg['scheme'])
 		table = f'{scheme}.{table}'
 	return cmd
+
 def bldDROP(table, cfg: dict={}, dbt: str='', what: str='table', pxcfg={}):
 	'''Build Asset Drop SQL Statement'''
 	table = sanitize(table, dbt, 'table', cfg['scheme'])
@@ -618,6 +658,7 @@ def bldDROP(table, cfg: dict={}, dbt: str='', what: str='table', pxcfg={}):
 	if dbt == 'POSTGRESQL':
 		cmd += ' CASCADE'
 	return cmd
+
 def bldGIVEN(gcmd, cfg={}, dbt=None, pxcfg={}):
 	''
 	table = 'given'
@@ -632,10 +673,12 @@ def bldGIVEN(gcmd, cfg={}, dbt=None, pxcfg={}):
 	self.build[table]['columns'] = cols
 	self.cmdr[table]['cmd'] = gcmd
 	return self
+
 def bldINDEX(cmd, dbt=None, pxcfg={}):
 	'''Add Index creation statements to the table creation also allow for future
 		peformance upgrades by retoractively creating indexes'''
 	return self
+
 def bldINSERT(cols, table, cfg={}, dbt=None, upsert=False, pxcfg={}):
 	'''Build Data Insertion SQL Statement'''#									||
 	table, cmdvals = sanitize(table, dbt), ''
@@ -663,6 +706,7 @@ def bldINSERT(cols, table, cfg={}, dbt=None, upsert=False, pxcfg={}):
 	if dbt == 'POSTGRESQL' and upsert == False:
 		cmd = f'{cmd} ON CONFLICT DO NOTHING'
 	return cmd
+
 def bldModify(table, what='table', dbt=None, pxcfg={}):
 	'''Modify table  '''
 	if what == 'table':
@@ -674,11 +718,13 @@ def bldModify(table, what='table', dbt=None, pxcfg={}):
 		#build insert
 		#build drop
 	return cmd
+
 def bldRENAME(table, ntable, cfg, pxcfg={}):
 	'''Build command to rebuild table with a new name'''
 	scheme = cfg['scheme']
 	cmd = f'ALTER TABLE {scheme}.{table} RENAME TO {ntable};'
 	return cmd
+
 def bldREV(cols, table, cfg={}, dbt=None, pxcfg={}):
 	'''Build a Table Revision Query - copy the original table to the same or
 		a different database with a different or same name if no conflicts and
@@ -695,6 +741,7 @@ def bldREV(cols, table, cfg={}, dbt=None, pxcfg={}):
 	bldINS()
 	execute()#create a new table populate the new table
 	return cmd#																	||
+
 def bldSELECT(cols, table, cfg={}, dbt=None, pxcfg={}):
 	'Build SQL Selection Statement for the given sql dialect'
 	table = sanitize(table, dbt)
@@ -737,6 +784,7 @@ def bldSELECT(cols, table, cfg={}, dbt=None, pxcfg={}):
 		cmd += f' {add}'#														||
 	#print('SELECT CMD', cmd)
 	return cmd
+
 def bldUPDATE(cols, table, cfg, dbt=None, upsert=False, pxcfg={}):
 	'''Build SQL to update table'''
 	if table != 'scheme':
@@ -756,6 +804,7 @@ def bldUPDATE(cols, table, cfg, dbt=None, upsert=False, pxcfg={}):
 		cmd += f"{col} = '{colslug}', "
 	cmd = cmd[:-2] + bldWHERE(cfg['WHERE'], table, dbt, pxcfg)#						||
 	return cmd
+
 def bldUPSERT(cols, table, cfg, dbt: str='POSTGRESQL', pxcfg={}):
 	'''Build SQL command to insert unless conflict and then update'''#			||
 	if dbt == 'POSTGRESQL':
@@ -773,6 +822,7 @@ def bldUPSERT(cols, table, cfg, dbt: str='POSTGRESQL', pxcfg={}):
 	elif dbt == 'SQLITE':
 		fulltable = sanitize(table, dbt)#
 	return cmd
+
 def bldWHERE(cfg, table, dbt=None, pxcfg={}):
 	'''Build where clause for cmd given parameters'''
 	cmd, oor, aand = ' WHERE ', False, False
@@ -832,6 +882,7 @@ def bldWHERE(cfg, table, dbt=None, pxcfg={}):
 		cmd = cmd.replace('[','').replace(']','')
 	#print('WHERE CMD', cmd)
 	return cmd
+
 def extractCmdColumns(cmd, dbt=None):#										||
 	'''Return the columns from a given cmd statement'''#						||
 	cols, lvl = [], 1#															||
@@ -875,6 +926,7 @@ def extractCmdColumns(cmd, dbt=None):#										||
 			ncol.it = ncol.it.strip('\n').strip(' ')#					||
 			cols.append(ncol.thing)#									||
 	return cols#														||
+
 def runREAD(conn, cmd, fill: list=[], dbt: str='SQLT'):
 	''' '''
 	curs, cmd, data = conn.cursor(), subtrix.mechanism(cmd, fill).run()[0], []#	||
@@ -892,6 +944,7 @@ def runREAD(conn, cmd, fill: list=[], dbt: str='SQLT'):
 	except Exception as e:
 		print(dbt,'Read Failed due to',e,'using this cmd', cmd)
 	return data, cmd
+
 def runWRITE(conn, cmd: str, data: list, how: str='INSERT', cols: list=[],
 								dbt: str='POSTGRESQL', retry=1, backup=False):#	||
 	'''Run a write command against the connected database
@@ -903,38 +956,50 @@ def runWRITE(conn, cmd: str, data: list, how: str='INSERT', cols: list=[],
 		if verfication is not received then funnel it back through the primary
 		database and write to error logs
 	'''
-	curs, status = conn.cursor(), False
-	if how in ('CRE', 'DROP', 'DELETE'):
-		try:
+	curs, status = conn.cursor(), False#										||
+	if how in ('CRE', 'DROP', 'DELETE'):#										||
+		try:#																	||
 			curs.execute(cmd)#													||
-			status = True
+			status = True#														||
+		except Exception as e:#													||
+			print(dbt, 'EDIT', 'Write Failed due to',e,'using cmd', cmd)#		||
+	elif how in ('UPSERT') and data != None:#									||
+		status = runUPSERT(curs, cmd, cols, data, backup)#						||
+	elif how in ('INSERT') and data != None:#									||
+		status = runINSERT(curs, cmd, data, backup)#							||
+	if log: print(f'{how}\n{cmd}\n{data}')#										||
+	return status#																||
+
+def runINSERT(curs, cmd, data, backup):#										||
+	''' '''
+	status = False#																||
+	try:#																		||
+		status = curs.executemany(cmd, data)#									||
+		if log: print(f'INSERT Status {status}')#								||
+		if backup == True:#														||
+			backupWRITE(wro, cmd, data, status)#								||
+	except Exception as e:#														||
+		print(dbt, 'INSERT', 'Write Failed due to',e,'using cmd', cmd)#			||
+		print('Data', data[0], 'Num', len(data[0]))#							||
+	return status#																||
+
+def runUPSERT(curs, cmd, cols, data, backup):
+	''' '''
+	status = False
+	for d in data:
+		d = [sanitize(x, dbt, 'content') for x in d]
+		fcmd = cmd.format(**dict(zip(cols, d)))
+		try:
+			status = curs.execute(fcmd, d)
+			if backup == True:
+				backupWRITE(wro, cmd, data, status)
 		except Exception as e:
-			print(dbt, 'EDIT', 'Write Failed due to',e,'using cmd', cmd)
-	elif data != None:
-		if how in ('UPSERT'):
-			for d in data:
-				d = [sanitize(x, dbt, 'content') for x in d]
-				fcmd = cmd.format(**dict(zip(cols, d)))
-				try:
-					status = curs.execute(fcmd, d)
-					if backup == True:
-						backupWRITE(wro, cmd, data, status)
-				except Exception as e:
-					conn.commit()# commit any work outstanding on current cursor
-					print(dbt, 'UPSERT', 'Write Failed on data','due to',e)
-					print('Data', d[0])
-					curs = conn.cursor()# initate a new cursor to continue operation
-		elif how in ('INSERT'):
-			try:
-				status = curs.executemany(cmd, data)#										||
-				if log: print(f'INSERT Status {status}')
-				if backup == True:
-					backupWRITE(wro, cmd, data, status)
-			except Exception as e:
-				print(dbt, 'INSERT', 'Write Failed due to',e,'using cmd', cmd)
-				print('Data', data[0], 'Num', len(data[0]))
-	if log: print(f'{how}\n{cmd}\n{data}')
+			conn.commit()# commit any work outstanding on current cursor
+			print(dbt, 'UPSERT', 'Write Failed on data','due to',e)
+			print('Data', d[0])
+			curs = conn.cursor()# initate a new cursor to continue operation
 	return status
+
 def sanitize(entry, dbt=None, etype='table', scheme=None):
 	''' '''
 	if entry == None:
@@ -978,6 +1043,7 @@ def sanitize(entry, dbt=None, etype='table', scheme=None):
 			entry = entry.replace('"', '')
 			entry = entry.replace('%', '<percent>')
 	return entry
+
 def sanitizeRecords(dikt):
 	lock = 0
 	for table in dikt.keys():
@@ -997,9 +1063,10 @@ def sanitizeRecords(dikt):
 				nrecords.append(record)
 		dikt[table]['records'] = nrecords
 	return dikt
+
+
 #=============================Resource Materials================================||
 '''
-
 https://dba.stackexchange.com/questions/22362/how-do-i-list-all-columns-for-a-specified-table
 https://docs.python.org/2/library/sqlite3.html
 https://www.sqlite.org/malloc.html
@@ -1009,25 +1076,5 @@ https://www.eversql.com/faster-pagination-in-mysql-why-order-by-with-limit-and-o
 POSTGRES
 https://www.citusdata.com/blog/2016/03/30/five-ways-to-paginate/
 https://stackoverflow.com/questions/24761133/pandas-check-if-row-exists-with-certain-values
-'''
-#==================================:::DNA:::====================================||
-'''
-<(DNA)>:
-	201804101534:
-		coupling:
-			version: <[active:.version]>
-			test:
-			description: >
-				Couple tmplts and data with subtrix systems implicitally
-				and explicitally
-			work:
-	201804101534:
-		here:
-			version: <[active:.version]>
-			test:
-			description: >
-				Define subtrix Routing for Utilization of Multiple subtrix
-				Systems
-			work:
 '''
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||

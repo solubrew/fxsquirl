@@ -111,8 +111,6 @@
 
 	expirary: <[expiration]> #											||
 	version: <[version]> #												||
-	path: <[LEXIvrs]>pheonix/elements/store/orgnql/sonql.py #			||
-	outline: <[outline]> #												||
 	authority: document|this #											||
 	security: sec|lvl2 #												||
 	<(WT)>: -32 #														||
@@ -141,7 +139,6 @@ from rhino.ossys import linux
 #=======================================================================||
 here = join(dirname(__file__),'')#						||
 there = abspath(join('../../..'))#						||set path at pheonix level
-version = '0.0.0.0.0.0'#												||
 log = True
 #=======================================================================||
 pxcfg = join(abspath(here), '_data_/fxsquirl.yaml')

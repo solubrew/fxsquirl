@@ -31,16 +31,15 @@ import os, datetime as dt#												||
 #=======================================================================||
 from condor import condor#								||
 from excalc import exam#									||
-from fxsquirl import store
 #=======================================================================||
 here = join(dirname(__file__),'')#										||
 there = abspath(join('../../..'))#										||set path at pheonix level
-version = '0.0.0.0.0.0'#												||
+log = True
 #=======================================================================||
 pxcfg = join(abspath(here), '_data_/dsitributor.yaml')#								||use default configuration
+
 class engine(object):#															||
 	'distribute data & files according to templated configurations'#	||
-	version = '0.0.0.0.0.0'#											||
 	def __init__(self, src, options=None, cfg=None):#					||=>Initialize class instance
 		'Initialize Distribution Engine'
 		pxcfg = condor.instruct(pxcfg).load().override(cfg)#			||load configuration file
@@ -52,6 +51,7 @@ class engine(object):#															||
 		self.kindSRC = self.kind[self.onqlSRC]#							||
 		self.dataOBJ = store.stuff(self.source).read()#					||set data
 		self.distLOCI = self.mapp()
+
 	def buildout(self, mapp=None, tmplts=None):#						||
 		'load templates -> populate templates -> write file/data tree'
 		#write out a csv file for data given template
@@ -62,6 +62,7 @@ class engine(object):#															||
 		if tmplts == None:#												||
 			self.tmplts += tmplts#										||
 		return self#													||
+
 	def creStructure(self, verse):#										||
 		#need to figure out where to implement the <(meta)> type rules
 		#use template to create a new file system based on implicit
@@ -69,6 +70,7 @@ class engine(object):#															||
 		self.loadStructure(tmplts, data)#								||
 		store.fsonql.doc(verse).write(branches)#						||
 		return self#													||
+
 	def chkStructure(self):
 		strctr = self.distribute['structure']
 		self.getCurrent()
@@ -76,21 +78,26 @@ class engine(object):#															||
 		log.out(cmpr)
 		cmpr.update()
 		return self
+
 	def cfgSyncDevice(self):
 		''
 		return self
+
 	def cfgSyncPath(self):
 		''
 		return self
+
 	def distVersion(self, cfg=None):
 		'Distribute new version of data & file given specific version'
 		if cfg == None:
 			nwvrsn = self.vrsns.getNext()
 		self.vrsns = vrsnr.engine(self.src).versions(vers)
 		return self
+
 	def divide(self):
 		'build method to seperate a file system given filtering and matching criteria'
 		return
+
 	def expand(self, tmplts=None):#should probaly develop into a generator
 		'Expand templates given various data structures'
 		if tmplts == None:
@@ -115,6 +122,7 @@ class engine(object):#															||
 				wrdata[name] = creview
 				inc += 1
 			self.dbo0.write({'views': wrdata})
+
 	def getArchives(self, cfg=None):
 		'read archived filesystem'
 		if self.src == None:
@@ -122,11 +130,13 @@ class engine(object):#															||
 		sanes = ['zz-hist_',]
 		self.archv = self.slctr.stratified('Filtered', sanes)['b']
 		return self
+
 	def getVersions(self, vers=[0,]):
 		if self.src == None:
 			self.getDistributionConfig(cfg)
 		self.vrsns = vrsnr.engine(self.src).versions(vers)
 		return self
+
 	def loadStructure(self, tmplts, data=None):
 		tmplts = []
 		data = {}
@@ -135,11 +145,13 @@ class engine(object):#															||
 		store.stuff()
 		branches = calctr.stuff().makePaths(tmplt['structure'], verse)
 		return self
+
 	def mapp(self):
 		'Create a mapping strucutre for distribution of given inputs'
 		if 'store' in self.kind.keys():
 			if self.kind['store'] == 'sqlite':
 				pass
+
 	def processDB(self):
 		''
 		dbo = sonql.doc(self.source)
@@ -155,6 +167,8 @@ class engine(object):#															||
 				if data == None:
 					break
 				yield DataFrame(data.dikt[table]['records'], columns=data.dikt[table]['columns'])
+
+
 def distCSV(db, f, cfg):
 	'Output a CSV file given a database request'
 	if 'tables' in cfg.keys():
@@ -168,27 +182,11 @@ def distCSV(db, f, cfg):
 			break
 		wrdata = data.dikt[t]['columns'] + data.dikt[t]['records']
 		tblonql.doc(f).write(wrdata)
+
+
 def distFS():
 	''
-#==========================Source Materials=============================||
-#============================:::DNA:::==================================||
+#==============================Source Materials=================================||
 '''
----
-<@[datetime]@>:
-	<[class]>:
-		version: <[active:.version]>
-		test:
-		description: >
-			<[description]>
-		work:
-			- <@[work_datetime]@>
-<[datetime]>:
-	here:
-		version: <[active:.version]>
-		test:
-		description: >
-			<[description]>
-		work:
-			- <@[work_datetime]@>
 '''
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
