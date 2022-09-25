@@ -57,17 +57,11 @@ except:
 	print('No SKLearn Module')
 #=======================================================================||
 from condor import condor#								||
-
 from excalc import data as calcd
-
 from fxsquirl import builder
-from fxsquirl.orgnql import fonql
+from squirl.orgnql import fonql
 #=======================================================================||
 here = join(dirname(__file__),'')#						||
-there = join(dirname(__file__))
-where = abspath(join('..'))#							||set path at pheonix level
-module_path = abspath(join('../../../'))
-version = '0.0.0.0.0.0'#												||
 log = True
 #=======================================================================||
 pxcfg = join(abspath(here), '_data_/selector.yaml')#									||use default configuration
@@ -165,12 +159,14 @@ class engine(builder.engine):
 			args = {'n_splits': splits, 'random_state': 42,'test_size': 2}#		||
 			self.folds = StratifiedShuffleSplit(**args)
 		elif foldtype == 'RandomSelection':#									||A random selection creates subsets with no regard to order
+			df = self.source[name]['store']
+			if log: print('DF', df)
 			if how == 'perc':
-				if log: print('SOURCEDFS', self.source)
-				dset = self.source[name]['data'].sample(frac=0.6666666, random_state=200)
+				if log: print('SOURCEDFS', list(self.source['cache'].store.iterkeys()))
+				dset = df.sample(frac=0.6666666, random_state=200)
 			elif how == 'filtr':
-				dset = self.source[name]['data'][df.iloc[:,3]=='validation']
-			self.dset0, self.dset1 = dset, self.source[name]['data'].drop(dset.index)
+				dset = df[df.iloc[:,3]=='validation']
+			self.dset0, self.dset1 = dset, df.drop(dset.index)
 		return self
 
 	def getColumns(self, columns):

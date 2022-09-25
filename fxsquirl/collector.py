@@ -29,25 +29,20 @@
 # -*- coding: utf-8 -*-
 #===============================================================================||
 from os.path import abspath, dirname, join
-#===============================================================================||
-here = join(dirname(__file__),'')#						||
-there = abspath(join('../../..'))#						||set path at pheonix level
-version = '0.0.0.0.0.0'#												||
-log = False
-#===============================================================================||
 import urllib, datetime as dt, time, sys#							||
 from logging import getLogger, basicConfig, DEBUG
 from logging.config import fileConfig
-#================================3rd Party Modules==============================||
-from fxsquirl.libs import profile, np, DataFrame, concat, pdfkit, pdr
 #===============================================================================||
 from condor import condor, thing#												||
 from excalc import data as calcd, text as calct, ts as calcts, tree as calctr#	||
 from excalc import exam#														||
-from fxsquirl.objnql import tblonql, txtonql
-from fxsquirl.orgnql import fonql, monql, sonql, yonql
+from squirl.objnql import tblonql, txtonql
+from squirl.orgnql import fonql, monql, sonql, yonql
 from fxsquirl import generator
+from fxsquirl.libs import profile, np, DataFrame, concat, pdfkit, pdr
 from subtrix import subtrix#									||
+#===============================================================================||
+here = join(dirname(__file__),'')#						||
 log = True
 #===============================================================================||
 pxcfg = join(abspath(here), '_data_/fxsquirl.yaml')#								||use default configuration
@@ -112,8 +107,11 @@ class engine(generator.engine):#													||
 					if log: print('ROBJ.cache', robj.cache.store[name])
 					self.cache.store[table] = robj.cache.store.pop(name)
 			if log: print('Collected', list(self.cache.store.iterkeys()))
-			if not robj.status:#I think there is tension between single pages of data below the page size and multiple pages
-				if log: print('Break Collection')
+			try:
+				if not robj.status:#I think there is tension between single pages of data below the page size and multiple pages
+					if log: print('Break Collection')
+					break
+			except:
 				break
 		if map != {}:
 			self.buildMappedColumn(map, table)

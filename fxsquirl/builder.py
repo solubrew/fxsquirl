@@ -21,16 +21,12 @@ import urllib, datetime as dt, time, sys#							||
 from pandas import DataFrame, concat
 #===============================================================================||
 from condor import condor, thing#										||
-
 from excalc import tree as calctr, ts as calcts
-
-from fxsquirl.objnql import tblonql
-from fxsquirl.orgnql import conql, fonql, monql, sonql, yonql
+from squirl.objnql import tblonql
+from squirl.orgnql import conql, fonql, monql, sonql, yonql
 from fxsquirl.libs import DataFrame, Cache
 #===============================================================================||
 here = join(dirname(__file__),'')#						||
-there = abspath(join('../../..'))#						||set path at pheonix level
-version = '0.0.0.0.0.0'#														||
 log = True
 #===============================================================================||
 pxcfg = join(abspath(here), '_data_/builder.yaml')#								||use default configuration
@@ -261,7 +257,9 @@ class engine():#															||
 			sinks for working with data in the system of modules'''
 		if name not in arsrc.keys():
 			arsrc[name] = {}
-		arsrc['cache'] = conql.doc(rsrc)
+		#currently no path for handing a dataframe directly as a resource
+		#
+		arsrc['cache'] = conql.doc(rsrc)#what is this accomplishing?
 		arsrc['cache'].store[name] = {}
 		arsrc[name]['type'] = srct
 		if srct in ('thing', 'object', 'thingify', 'funcify'):
@@ -273,8 +271,10 @@ class engine():#															||
 			arsrc[name]['store'] = sonql.doc(rsrc)
 			arsrc[name]['path'] = rsrc
 		elif srct in ('cache', ):
-			arsrc[name]['store'] = arsrc['cache']
+			arsrc[name]['store'] = arsrc['cache']#this is becasue a default cashe resource doesnt' have a store
 			arsrc[name]['path'] = rsrc
+		elif srct in ('dataframe'):#this is hacked in for now
+			arsrc[name]['store'] = rsrc
 		else:
 			print('Resource Not Found', srct)
 		return arsrc

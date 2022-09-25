@@ -69,17 +69,16 @@ from gator import financial, process, scientific, statistical
 from fxsquirl import collector, encoder, processor, selector
 #===============================================================================||
 here = join(dirname(__file__),'')#												||
-there = abspath(join('../../..'))#												||set path at pheonix level
-version = '0.0.0.0.0.0'#														||
 log = False
 #===============================================================================||
-pxcfg = join(abspath(here), '_data_/analyzer.yaml')#								||use default configuration
-class engine(collector.engine):#														||=>Define class
+pxcfg = join(abspath(here), '_data_', 'analyzer.yaml')#							||use default configuration
+
+class engine(collector.engine):#												||=>Define class
 	'''Analyze input data using available and/or identified methods
 		build in the ability to analyze the data being handled by the program and
 		when best to encode it to an inmemory database or ondisk database
 	'''#			||=>Describe class
-	version = '0.0.0.0.0.0'#													||=>Set version
+
 	def __init__(self, cfg={}):#										||=>Initialize class instance
 		self.config = condor.instruct(pxcfg).override(cfg)#						||load configuration file
 		self.cycle = thing.what().uuid().ruuid[-5:]#							||Collection Id
