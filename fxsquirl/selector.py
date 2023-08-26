@@ -65,8 +65,15 @@ here = join(dirname(__file__),'')#						||
 log = True
 #=======================================================================||
 pxcfg = join(abspath(here), '_data_/selector.yaml')#									||use default configuration
+
 class engine(builder.engine):
-	''' '''
+	'''The Selector engine is designed to select data from a data storage
+		resource
+
+		using various selection methods
+			
+
+	'''
 	def __init__(self, cfg={}):#	||
 		''' '''
 		self.config = condor.instruct(pxcfg).override(cfg)#				||load configuration file

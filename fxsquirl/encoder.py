@@ -28,12 +28,12 @@ from types import GeneratorType
 #=================================3rd Party Modules=============================||
 from pandas import DataFrame, to_datetime
 from numpy import finfo, iinfo, int8, int16, int32, int64, float16, float32
-from numpy import float64, ndarray, object, save
+from numpy import float64, ndarray, save
 from io import BytesIO
 #===============================================================================||
 from condor import condor#										||
 from excalc import data as calcd, tree as calctr, exam#											||
-from fxsquirl.orgnql import sonql
+from squirl.orgnql import sonql
 from fxsquirl import selector
 #===============================================================================||
 here = join(dirname(__file__),'')#												||

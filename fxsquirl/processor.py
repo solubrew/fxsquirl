@@ -32,7 +32,8 @@ log = False
 #===============================================================================||
 pxcfg = join(abspath(here), '_data_/processor.yaml')#								||use default configuration
 class engine(validator.engine):
-	''' '''
+	'''The Processor engine is designed to transform data by applying various
+		functions to validated data'''
 	version = '0.0.0.0.0.0'
 	def __init__(self, cfg={}):
 		''' '''
@@ -118,6 +119,7 @@ class engine(validator.engine):
 			page += 1
 			params['offset'] = step
 		yield None
+
 	def process(self, reader, load, params={}, extract=[]):
 		''' '''
 		for name, actions in load.items():
@@ -125,6 +127,7 @@ class engine(validator.engine):
 			self.initExtract(*extract)
 			self.collect(name)
 		return self
+
 	def processEP(self, ep, options=[], params={}, altercols={}):
 		''' '''
 		cfgs = self.config.dikt['endpoints'][ep]
@@ -153,11 +156,13 @@ class engine(validator.engine):
 				params['offset'] = step
 				if page > 50:
 					break
+
 	def _processPayload(self, payload):
 		'''Process given data breaking down by database storage needs across
 			inmem and ondisk databases'''
 		self.data = []
 		return self
+
 def _procData(cfg, params, dbo, dbi, fx, targs, filtr, ftrs=None, limit=None):
 	'''Process Data Against generator engine utilzing rules and templates to
 		output a batch of files and/or data entries'''
@@ -169,6 +174,7 @@ def _procData(cfg, params, dbo, dbi, fx, targs, filtr, ftrs=None, limit=None):
 		data = mapData(dataSET)
 		for tmplt in tmplts:
 			subtrix.mechanism(tmplt, data)
+
 def _procDataTransform():
 	'''Transform dataset into its most usable version for applying training
 		i.e.

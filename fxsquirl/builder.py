@@ -29,8 +29,22 @@ from fxsquirl.libs import DataFrame, Cache
 here = join(dirname(__file__),'')#						||
 log = True
 #===============================================================================||
-pxcfg = join(abspath(here), '_data_/builder.yaml')#								||use default configuration
+pxcfg = join(abspath(here), '_data_', 'builder.yaml')#								||use default configuration
+
 class engine():#															||
+	'''The Builder engine is designed to setup data storage resources such as
+		a cache
+		a database
+			view
+			index
+			load
+			table
+		a filesystem
+		an endpoint connection
+			to an API
+			to an FTP site
+		files of various types
+		'''
 	def __init__(self, cfg={}):#		||
 		''' '''#							||
 		self.config = condor.instruct(pxcfg).override(cfg)#							||load configuration file

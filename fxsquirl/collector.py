@@ -45,7 +45,7 @@ from subtrix import subtrix#									||
 here = join(dirname(__file__),'')#						||
 log = True
 #===============================================================================||
-pxcfg = join(abspath(here), '_data_/fxsquirl.yaml')#								||use default configuration
+pxcfg = join(abspath(here), '_data_', 'fxsquirl.yaml')#								||use default configuration
 class engine(generator.engine):#													||
 	'''
 	WhereUsed:

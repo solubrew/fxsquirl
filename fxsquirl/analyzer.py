@@ -48,24 +48,30 @@ import datetime as dt#															||
 import pprint as pp
 #===============================================================================||
 from pandas import DataFrame
-from pandas_profiling import ProfileReport
+try:
+	from pandas_profiling import ProfileReport
+except Exception as e:
+    print('pandas_profiling failed due to ',e)
 from numpy import histogram
-from sklearn import metrics#											||
+try:
+	from sklearn import metrics#											||
+except Exception as e:
+    print('sklearn failed due to ',e)
 try:
 	from tsfresh import extract_features
 	from tsfresh import select_features
 	from tsfresh.utilities.dataframe_functions import impute
 	from tsfresh import extract_relevant_features
-except:
-	pass
+except Exception as e:
+    print('tsfresh failed due to ',e)
 from statsmodels import api as sm
 from statsmodels.formula import api as smf
 from memory_profiler import profile
 #===============================================================================||
 from condor import condor, thing
 from excalc import stats as calcs, tree as calctr, data as calcd
-from fxsquirl.orgnql import sonql
-from gator import financial, process, scientific, statistical
+from squirl.orgnql import sonql
+#from gator import financial, process, scientific, statistical
 from fxsquirl import collector, encoder, processor, selector
 #===============================================================================||
 here = join(dirname(__file__),'')#												||

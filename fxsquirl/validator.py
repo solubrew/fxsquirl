@@ -30,7 +30,12 @@ log = False
 pxcfg = join(abspath(here), '_data_/validator.yaml')#								||use default configuration
 
 class engine(selector.engine):
-	'''Check documents, objects and datasets against templates and rules'''
+	'''The Validator engine is designed to apply various validations to
+		the selected data
+
+	Check documents, objects and datasets against templates and rules
+
+	'''
 
 	def __init__(self, cfg=None):
 		''' '''#			||
