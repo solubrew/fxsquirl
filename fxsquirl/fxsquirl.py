@@ -130,6 +130,7 @@ from condor import condor, thing#												||
 from excalc import exam
 from fxsquirl import analyzer
 from squirl.orgnql import orgnql#						||
+from fxsquirl import collector
 #=======================================================================||
 here = join(dirname(__file__),'')#						||
 there = abspath(join('../../..'))#						||set path at pheonix level

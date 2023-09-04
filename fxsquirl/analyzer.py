@@ -66,7 +66,10 @@ except Exception as e:
     print('tsfresh failed due to ',e)
 from statsmodels import api as sm
 from statsmodels.formula import api as smf
-from memory_profiler import profile
+try:
+	from memory_profiler import profile
+except:
+	print('No Memory Profiler')
 #===============================================================================||
 from condor import condor, thing
 from excalc import stats as calcs, tree as calctr, data as calcd
