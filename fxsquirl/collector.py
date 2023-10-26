@@ -33,14 +33,10 @@ import urllib, datetime as dt, time, sys#							||
 from logging import getLogger, basicConfig, DEBUG
 from logging.config import fileConfig
 #===============================================================================||
-from condor import condor, thing#												||
-from excalc import data as calcd, text as calct, ts as calcts, tree as calctr#	||
-from excalc import exam#														||
-from squirl.objnql import tblonql, txtonql
-from squirl.orgnql import fonql, monql, sonql, yonql
+from condor import condor
+from squirl.orgnql import sonql
 from fxsquirl import generator
-from fxsquirl.libs import profile, np, DataFrame, concat, pdfkit, pdr
-from subtrix import subtrix#									||
+from fxsquirl.libs import np, DataFrame, concat
 #===============================================================================||
 here = join(dirname(__file__),'')#						||
 log = True

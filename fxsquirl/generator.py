@@ -37,18 +37,9 @@
 # -*- coding: utf-8 -*-
 #===============================================================================||
 from os.path import abspath, dirname, join
-import os, datetime as dt, numpy as np, math, random, string#					||
-from decimal import *#															||
-from timeit import default_timer as timer#										||
-
-import numpy as np#			||
-
 #===============================================================================||
 from condor import condor#										||
-from condor.thing import makeDateTime, when
-
-from excalc import ts as calcts, stats
-
+from subtrix.thing import When
 from fxsquirl import processor
 #===============================================================================||
 here = join(dirname(__file__),'')#												||
@@ -184,7 +175,7 @@ def csvFromDB():
 		print(data.dikt.keys())
 		df = DataFrame(data.dikt[t]['records'], columns=data.dikt[t]['columns'])
 		for model in smodels.keys():
-			f = f'{setPath}{when}/Submission_{smodels[model]}.csv'
+			f = f'{setPath}{When}/Submission_{smodels[model]}.csv'
 			twrite = tblonql.doc(f)
 			predicts['id'] = df['targetid']
 			predicts['prediction_kazutsugi'] = df[smodels[model]]

@@ -1,4 +1,4 @@
-#@@@@@@@@@@@@@Pheonix.Molecules.Analyzer.Analyzer@@@@@@@@@@@@@@@@@@@@@@@||
+# @@@@@@@@@@@@@Pheonix.Molecules.Analyzer.Analyzer@@@@@@@@@@@@@@@@@@@@@@@||
 '''
 ---
 <(META)>:
@@ -42,55 +42,50 @@
 	<(WT)>: -32
 '''
 # -*- coding: utf-8 -*-
-#===============================================================================||
+# ===============================================================================||
 from os.path import abspath, dirname, join
-import datetime as dt#															||
-import pprint as pp
-#===============================================================================||
-from pandas import DataFrame
+# ===============================================================================||
 try:
 	from pandas_profiling import ProfileReport
 except Exception as e:
-    print('pandas_profiling failed due to ',e)
+	print('pandas_profiling failed due to ', e)
 from numpy import histogram
 try:
-	from sklearn import metrics#											||
+	from sklearn import metrics  # ||
 except Exception as e:
-    print('sklearn failed due to ',e)
+	print('sklearn failed due to ', e)
 try:
 	from tsfresh import extract_features
 	from tsfresh import select_features
 	from tsfresh.utilities.dataframe_functions import impute
 	from tsfresh import extract_relevant_features
 except Exception as e:
-    print('tsfresh failed due to ',e)
-from statsmodels import api as sm
-from statsmodels.formula import api as smf
+	print('tsfresh failed due to ', e)
 try:
 	from memory_profiler import profile
 except:
 	print('No Memory Profiler')
-#===============================================================================||
-from condor import condor, thing
-from excalc import stats as calcs, tree as calctr, data as calcd
-from squirl.orgnql import sonql
-#from gator import financial, process, scientific, statistical
-from fxsquirl import collector, encoder, processor, selector
-#===============================================================================||
-here = join(dirname(__file__),'')#												||
+# ===============================================================================||
+from condor import condor
+from subtrix import thing
+from excalc import stats as calcs
+from fxsquirl import collector
+# ===============================================================================||
+here = join(dirname(__file__), '')  # ||
 log = False
-#===============================================================================||
-pxcfg = join(abspath(here), '_data_', 'analyzer.yaml')#							||use default configuration
+# ===============================================================================||
+pxcfg = join(abspath(here), '_data_', 'analyzer.yaml')  # ||use default configuration
 
-class engine(collector.engine):#												||=>Define class
+
+class engine(collector.engine):  # ||=>Define class
 	'''Analyze input data using available and/or identified methods
 		build in the ability to analyze the data being handled by the program and
 		when best to encode it to an inmemory database or ondisk database
-	'''#			||=>Describe class
+	'''  # ||=>Describe class
 
-	def __init__(self, cfg={}):#										||=>Initialize class instance
-		self.config = condor.instruct(pxcfg).override(cfg)#						||load configuration file
-		self.cycle = thing.what().uuid().ruuid[-5:]#							||Collection Id
+	def __init__(self, cfg={}):  # ||=>Initialize class instance
+		self.config = condor.instruct(pxcfg).override(cfg)  # ||load configuration file
+		self.cycle = thing.what().uuid().ruuid[-5:]  # ||Collection Id
 		collector.engine.__init__(self, self.config)
 
 	def initAnalyzer(self, data):
@@ -101,65 +96,66 @@ class engine(collector.engine):#												||=>Define class
 	def accuracy(self, probabilities):
 		'''Caclculate the accuracy of the prbabilities provided vs the known
 			data '''
-		self.accuracy = metrics.accuracy_score(self.probabilities, self.data)#	||
+		self.accuracy = metrics.accuracy_score(self.probabilities, self.data)  # ||
 		return self
 
-	def accuracy_details(self):#												||=>define method
-		'''Calculate and return details of correct prediction scores'''#		||
-		self.num_correct = 0#													||
-		for i in self.determinent:#												||
-			self.num_correct += i#												||
-		self.num_total = len(self.determinent)#									||
-		self.corrperc = self.num_correct/self.num_total * 100.0#				||calc correct percentage
-		return self#															||
+	def accuracy_details(self):  # ||=>define method
+		'''Calculate and return details of correct prediction scores'''  # ||
+		self.num_correct = 0  # ||
+		for i in self.determinent:  # ||
+			self.num_correct += i  # ||
+		self.num_total = len(self.determinent)  # ||
+		self.corrperc = self.num_correct / self.num_total * 100.0  # ||calc correct percentage
+		return self  # ||
 
-	def accuracy_map(self, x, actvtr):#											||
-		'''Calculate Accuracy of knowns to predictions'''#						||
-		self.determinent = []#													||
-		for i in range(len(self.obsv)):#										||
-			if self.knowns[i] == 1 and self.obsv[i] > actvtr:#					||
-				self.determinent.append(1)#										||
-			elif self.knowns[i] == 0 and self.obsv[i] < actvtr:#				||
-				self.determinent.append(1)#										||
-			else:#																||
-				self.determinent.append(0)#										||
-		self.accuracy()#														||=>display message
-		return self#															||
+	def accuracy_map(self, x, actvtr):  # ||
+		'''Calculate Accuracy of knowns to predictions'''  # ||
+		self.determinent = []  # ||
+		for i in range(len(self.obsv)):  # ||
+			if self.knowns[i] == 1 and self.obsv[i] > actvtr:  # ||
+				self.determinent.append(1)  # ||
+			elif self.knowns[i] == 0 and self.obsv[i] < actvtr:  # ||
+				self.determinent.append(1)  # ||
+			else:  # ||
+				self.determinent.append(0)  # ||
+		self.accuracy()  # ||=>display message
+		return self  # ||
 
 	def attribute(self):
 		''' '''
-		l = self.data.shape(1)+1
+		l = self.data.shape(1) + 1
 		for i in range(l):
 			isCategorical = analizer(self.data[i]).isCategory()
 			if isCategorical == True:
 				cols.append(i)
-		self.dikt = mutate_data.restructure(self.data).recurdexer(cols,True).data
+		self.dikt = mutate_data.restructure(self.data).recurdexer(cols, True).data
 		return self
 
 	def auc_score(self, probabilities):
 		'''Score the Area Under the Curve for the given Probabilities'''
-#		print('Probability columns', probabilities.columns)
-#		if 'ids' in probabilities.columns:
-#			probabilities.drop(columns='ids', inplace=True)
+		#		print('Probability columns', probabilities.columns)
+		#		if 'ids' in probabilities.columns:
+		#			probabilities.drop(columns='ids', inplace=True)
 		try:
-			self.auc = metrics.roc_auc_score(self.data, probabilities)#			||Area Under the Receiver Operating Characteristic Curve
+			self.auc = metrics.roc_auc_score(self.data,
+			                                 probabilities)  # ||Area Under the Receiver Operating Characteristic Curve
 		except Exception as e:
 			self.auc = None
-			d = {'Data': self.data, 'Probabilities': probabilities}#	||
+			d = {'Data': self.data, 'Probabilities': probabilities}  # ||
 			print(f'AUC LogLoss Analysis of Probability Failed {d} {e}')
 		return self.auc
 
-	def boundary(self):#												||
+	def boundary(self):  # ||
 		''' '''
-		self.bndry , cnt, dimcnt = {}, 0, 0#							||
-		for a,b in self.segment:#										||
-			for i in a:#												||
-				if i not in b:#											||
-					j += 1#												||
-			if j == 1:#													||
-				self.bndry[dimcnt].append(a,b)#							||
-				dimcnt += 1#											||
-		return self#													||=>
+		self.bndry, cnt, dimcnt = {}, 0, 0  # ||
+		for a, b in self.segment:  # ||
+			for i in a:  # ||
+				if i not in b:  # ||
+					j += 1  # ||
+			if j == 1:  # ||
+				self.bndry[dimcnt].append(a, b)  # ||
+				dimcnt += 1  # ||
+		return self  # ||=>
 
 	def branch(self):
 		'''Define branching coordinate system space'''
@@ -168,9 +164,9 @@ class engine(collector.engine):#												||=>Define class
 	def calculate(self, calctype: str):
 		''' '''
 		if calctype == 'financial':
-			fincalc()  #run basic financial calculations against given data
+			fincalc()  # run basic financial calculations against given data
 		elif calctype == 'process':
-			pass #run basic process calculations against given data
+			pass  # run basic process calculations against given data
 		elif calctype == 'scientific':
 			pass
 		elif calctype == 'statistical':
@@ -198,7 +194,7 @@ class engine(collector.engine):#												||=>Define class
 		for i in self.num.split('.'):
 			sn.append(i)
 		if len(sn) > 2:
-			debug.fixthis(module+'.inspect.magnitutde')
+			debug.fixthis(module + '.inspect.magnitutde')
 		rn, ln, l, = [sn[0], sn[1], 10]
 		self.magnitude = len(rn) ** l
 		self.sigfigs = len(ln)
@@ -207,7 +203,7 @@ class engine(collector.engine):#												||=>Define class
 
 	def first(self, data):
 		'''Move this to the data calcgen module probably'''
-		#print('First Data', data)
+		# print('First Data', data)
 		return list(data)[0]
 
 	def getStats(self):
@@ -217,14 +213,14 @@ class engine(collector.engine):#												||=>Define class
 			self.aset[stat.hashd] = stat.dikt['Stats']
 		return self
 
-	def histogram(self, dbin=None):#														||
+	def histogram(self, dbin=None):  # ||
 		''' '''
 		drange = ''
 		if dbin == None:
 			dbin = self.data.max - self.data.min
 		self.histogram, self.binedges = histogram(self.data, bins=dbin,
-													range=None, normed=False,
-													weights=None,density=None)#	||
+		                                          range=None, normed=False,
+		                                          weights=None, density=None)  # ||
 		return self
 
 	def isCategory(self, actlvl=1):
@@ -260,7 +256,7 @@ class engine(collector.engine):#												||=>Define class
 		'''Calculate Percentage Max entries for each column in dataset'''
 		for col in self.data.columns:
 			max = self.data[col].max()
-			self.data['pmax_{0}'.format(col)] = self.data[col].apply(x/max, 1)
+			self.data['pmax_{0}'.format(col)] = self.data[col].apply(x / max, 1)
 		return self
 
 	def profile(self):
@@ -280,11 +276,11 @@ class engine(collector.engine):#												||=>Define class
 		for k in data.keys():
 			if k == 'prime':
 				d0 = data[k]['dset']
-				r[data[k]['dhash']] = [0 for x in range(len(d0))]#		||
+				r[data[k]['dhash']] = [0 for x in range(len(d0))]  # ||
 			d1 = data[k]['dset']
 			r[data[k]['dhash']] = []
 			for i in range(len(d0)):
-				r[data[k]['dhash']].append(d0[i]-d1[i])
+				r[data[k]['dhash']].append(d0[i] - d1[i])
 		return self
 
 	def run(self, cfg={}):
@@ -306,35 +302,35 @@ class engine(collector.engine):#												||=>Define class
 		'''Store analysis as a data set in a default database configuration'''
 		return self
 
-	def segments(self):#												||=>Define method
-		'Calculate all line segments'#									||=>Desribe method
-		if self.coords == 'cartesian':#									||
-			spt, cnt = [], 0#											||
-			for pt in pts.keys():#										||
-				if spt == []:#											||
-					spt = pt#											||
-					continue#											||
-				if [pt,spt] != self.segment.values():#					||
-					self.segmnt[0] = [pt,spt]#							||
-		elif self.coords == 'polar':#									||
-			spt, cnt = [], 0#											||
-		return self#													||=>
+	def segments(self):  # ||=>Define method
+		'Calculate all line segments'  # ||=>Desribe method
+		if self.coords == 'cartesian':  # ||
+			spt, cnt = [], 0  # ||
+			for pt in pts.keys():  # ||
+				if spt == []:  # ||
+					spt = pt  # ||
+					continue  # ||
+				if [pt, spt] != self.segment.values():  # ||
+					self.segmnt[0] = [pt, spt]  # ||
+		elif self.coords == 'polar':  # ||
+			spt, cnt = [], 0  # ||
+		return self  # ||=>
 
-	def sigmamap(self, lvl: int=9, sigfig: int=3):
+	def sigmamap(self, lvl: int = 9, sigfig: int = 3):
 		'''Map out the Sigma Distribution to the given level for the current
 			dataset '''
 		if self.test('normal_gaussian'):
 			for i in range(lvl):
-				self.sigma[i] = stddev*i
+				self.sigma[i] = stddev * i
 		else:
-			self.sigma = {}#{i = None for i in range(lvl)}
+			self.sigma = {}  # {i = None for i in range(lvl)}
 		return self
 
 	def centerality(self):
 		''' '''
-		if round(float(self.mean),sigfig) > round(float(self.median),sigfig):
+		if round(float(self.mean), sigfig) > round(float(self.median), sigfig):
 			return -1
-		elif round(float(self.mean),sigfig) == round(float(self.median),sigfig):
+		elif round(float(self.mean), sigfig) == round(float(self.median), sigfig):
 			return 0
 		else:
 			return 1
@@ -343,48 +339,48 @@ class engine(collector.engine):#												||=>Define class
 		if how == 'full':
 			auc = self.auc_score(predicts)
 			logloss = self.logloss(predicts)
-			#stats = self.statistical()
-#			scores = {'AUC': auc, 'LogLoss': logloss, 'Mean': self.mean,
-#						'Median': self.median, 'StdDev': self.stddev,
-#						'Length': self.length, 'Width': self.width}#			||
+			# stats = self.statistical()
+			#			scores = {'AUC': auc, 'LogLoss': logloss, 'Mean': self.mean,
+			#						'Median': self.median, 'StdDev': self.stddev,
+			#						'Length': self.length, 'Width': self.width}#			||
 			scores = {'AUC': auc, 'LogLoss': logloss, 'Mean': 0,
-						'Median': 0, 'StdDev': 0,
-						'Length': 0, 'Width': 0}#			||
+			          'Median': 0, 'StdDev': 0,
+			          'Length': 0, 'Width': 0}  # ||
 
-#			print('Scoring Successful',scores)
+		#			print('Scoring Successful',scores)
 		return scores
 
 	def variability(self):
 		'''Calculate Variablility as the difference between an array of
 			statistics'''
-		self.CoV = ''#Population Coefficient of Variation - Error terms of stdDev Simple moving average
-		self.smplCoV = ''#(1+1/4n)*(sstdev/xbar)
+		self.CoV = ''  # Population Coefficient of Variation - Error terms of stdDev Simple moving average
+		self.smplCoV = ''  # (1+1/4n)*(sstdev/xbar)
 		self.e_stddev = e_calc.stddev
 		self.e_median = e_calc.median
 		self.centrality_gap = self.e_mean - self.e_median
 		self.variability = {'sma': calc.sma, 'stddev': calc.stddev,
-							'centrality_gap': calc.mean-calc.median,
-							'e_sma': e_calc.sma, 'e_std': e_std,
-							'e_centrality_gap': e_centrality_gap}
+		                    'centrality_gap': calc.mean - calc.median,
+		                    'e_sma': e_calc.sma, 'e_std': e_std,
+		                    'e_centrality_gap': e_centrality_gap}
 		calc = self.variation()
-		e = stuff(self.data).mean_errors().error_terms#calculate mean error of each datapoint
-		e_calc = self.variation()#calculate the mean and median spread of the error terms
+		e = stuff(self.data).mean_errors().error_terms  # calculate mean error of each datapoint
+		e_calc = self.variation()  # calculate the mean and median spread of the error terms
 		self.stddev = variablity['stddev']
 		self.sma = variablity['sma']
 		self.digitmap = self.mapper(self.variablity['unique']).mapped
-		self.variance = Decimal(variance().sample(data))#						||
-		self.stddev = Decimal(stdDev(self.variance).sample(data))#				||standard deviation
-		self.threesigma = Decimal(3*self.stddev)#								||
-		self.digitmap = self.mapper(self.variablity['unique']).mapped#			||variation mapping
-		if self.mean == None:#
-			self.centralities()#
-		self.sigfig = sigfig#
-		if self.scope == 'sample':#
-			n, xbar, some = Decimal(len(data)), self.geometric_mean, 0#
+		self.variance = Decimal(variance().sample(data))  # ||
+		self.stddev = Decimal(stdDev(self.variance).sample(data))  # ||standard deviation
+		self.threesigma = Decimal(3 * self.stddev)  # ||
+		self.digitmap = self.mapper(self.variablity['unique']).mapped  # ||variation mapping
+		if self.mean == None:  #
+			self.centralities()  #
+		self.sigfig = sigfig  #
+		if self.scope == 'sample':  #
+			n, xbar, some = Decimal(len(data)), self.geometric_mean, 0  #
 			for x in data:
-				residual = Decimal((Decimal(x)-Decimal(xbar))**2)
+				residual = Decimal((Decimal(x) - Decimal(xbar)) ** 2)
 				some += residual
-			self.variance = Decimal(some/(n-1))
+			self.variance = Decimal(some / (n - 1))
 			if self.variance == None:
 				self.stddev = math.sqrt(float(variance().sample(data)))
 			else:
@@ -393,14 +389,14 @@ class engine(collector.engine):#												||=>Define class
 			n = Decimal(len(data))
 			some = 0
 			for x in data:
-				residual = Decimal((Decimal(x)-Decimal(xbar))**2)
+				residual = Decimal((Decimal(x) - Decimal(xbar)) ** 2)
 				some += residual
-			self.variance = Decimal(some/n)
+			self.variance = Decimal(some / n)
 			if self.variance == None:
 				self.stddev = math.sqrt(float(variance().population(data)))
 			else:
 				self.stddev = math.sqrt(float(self.variance))
-		self.mad = findMAD(self.data)#											||find Median Abs Deviation
+		self.mad = findMAD(self.data)  # ||find Median Abs Deviation
 		return self
 
 	def volatility(self):
@@ -411,13 +407,14 @@ class engine(collector.engine):#												||=>Define class
 		self.intraday_volatility = 0
 		return self
 
-#========================Code Source Examples===========================||
+
+# ========================Code Source Examples===========================||
 '''
 https://en.wikipedia.org/wiki/Coefficient_of_variation
 
 '''
-#============================:::DNA:::==================================||
+# ============================:::DNA:::==================================||
 '''
 
 '''
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@||

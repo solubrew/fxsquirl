@@ -71,7 +71,7 @@ class engine(builder.engine):
 		resource
 
 		using various selection methods
-			
+
 
 	'''
 	def __init__(self, cfg={}):#	||
@@ -193,7 +193,9 @@ class engine(builder.engine):
 			uniswap source connected to the ethereum web3 portal
 			a function is called directly that is build to access the
 			data from the correct contract using the proper functions'''
-		data = self._request(self.ep.format(**params))
+		ep = self.ep.format(**params)#.replace('address=0', 'address=0xBd05fEf925Ed08C9cC3F60126D376D9048dc1407')
+		#data = self._request(self.ep.format(**params))
+		data = self._request(ep)
 		if log: print('EP Data', data)
 		load = [data, links, maplinks, name, altercols, psize]
 		status = self.buildMappedTable(*load)
